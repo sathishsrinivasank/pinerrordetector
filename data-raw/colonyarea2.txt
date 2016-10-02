@@ -1,0 +1,385 @@
+platenumber	row	column	data_subtypes
+1	A	1	Empty
+1	B	1	Pinning Error
+1	C	1	Pinning Error
+1	D	1	Empty
+1	E	1	Morethan Plate Median
+1	F	1	Morethan Plate Median
+1	G	1	Lessthan Plate Median
+1	H	1	Lessthan 25% Plate Median
+1	I	1	Pinning Error
+1	J	1	Morethan Plate Median
+1	K	1	Lessthan Plate Median
+1	L	1	Morethan Plate Median
+1	M	1	Morethan Plate Median
+1	N	1	Morethan 90% Plate Median
+1	O	1	Lessthan Plate Median
+1	P	1	Lessthan Plate Median
+1	A	2	Lessthan Plate Median
+1	B	2	Pinning Error
+1	C	2	Pinning Error
+1	D	2	Pinning Error
+1	E	2	Empty
+1	F	2	Empty
+1	G	2	Lessthan Plate Median
+1	H	2	Lessthan Plate Median
+1	I	2	Lessthan Plate Median
+1	J	2	Lessthan Plate Median
+1	K	2	Lessthan 25% Plate Median
+1	L	2	Lessthan 25% Plate Median
+1	M	2	Morethan Plate Median
+1	N	2	Morethan Plate Median
+1	O	2	Morethan Plate Median
+1	P	2	Morethan Plate Median
+1	A	3	Lessthan Plate Median
+1	B	3	Morethan Plate Median
+1	C	3	Lessthan Plate Median
+1	D	3	Morethan Plate Median
+1	E	3	Pinning Error
+1	F	3	Pinning Error
+1	G	3	Pinning Error
+1	H	3	Pinning Error
+1	I	3	Pinning Error
+1	J	3	Empty
+1	K	3	Empty
+1	L	3	Empty
+1	M	3	Lessthan Plate Median
+1	N	3	Morethan Plate Median
+1	O	3	Morethan Plate Median
+1	P	3	Lessthan Plate Median
+1	A	4	Lessthan Plate Median
+1	B	4	Morethan Plate Median
+1	C	4	Morethan Plate Median
+1	D	4	Lessthan Plate Median
+1	E	4	Morethan Plate Median
+1	F	4	Morethan 90% Plate Median
+1	G	4	Lessthan Plate Median
+1	H	4	Lessthan Plate Median
+1	I	4	Morethan Plate Median
+1	J	4	Morethan Plate Median
+1	K	4	Morethan Plate Median
+1	L	4	Morethan Plate Median
+1	M	4	Lessthan Plate Median
+1	N	4	Lessthan Plate Median
+1	O	4	Lessthan Plate Median
+1	P	4	Morethan Plate Median
+1	A	5	Morethan Plate Median
+1	B	5	Lessthan Plate Median
+1	C	5	Lessthan Plate Median
+1	D	5	Morethan Plate Median
+1	E	5	Pinning Error
+1	F	5	Pinning Error
+1	G	5	Pinning Error
+1	H	5	Lessthan Plate Median
+1	I	5	Morethan Plate Median
+1	J	5	Morethan Plate Median
+1	K	5	Lessthan Plate Median
+1	L	5	Morethan Plate Median
+1	M	5	Lessthan Plate Median
+1	N	5	Lessthan Plate Median
+1	O	5	Morethan Plate Median
+1	P	5	Morethan Plate Median
+1	A	6	Morethan Plate Median
+1	B	6	Morethan Plate Median
+1	C	6	Morethan Plate Median
+1	D	6	Lessthan Plate Median
+1	E	6	Lessthan Plate Median
+1	F	6	Morethan Plate Median
+1	G	6	Lessthan Plate Median
+1	H	6	Morethan Plate Median
+1	I	6	Empty
+1	J	6	Empty
+1	K	6	Empty
+1	L	6	Lessthan Plate Median
+1	M	6	Lessthan Plate Median
+1	N	6	Morethan Plate Median
+1	O	6	Morethan Plate Median
+1	P	6	Lessthan Plate Median
+1	A	7	Morethan Plate Median
+1	B	7	Morethan 90% Plate Median
+1	C	7	Lessthan Plate Median
+1	D	7	Lessthan Plate Median
+1	E	7	Morethan Plate Median
+1	F	7	Lessthan Plate Median
+1	G	7	Lessthan Plate Median
+1	H	7	Lessthan Plate Median
+1	I	7	Lessthan Plate Median
+1	J	7	Morethan 90% Plate Median
+1	K	7	Morethan Plate Median
+1	L	7	Lessthan Plate Median
+1	M	7	Morethan Plate Median
+1	N	7	Morethan 90% Plate Median
+1	O	7	Morethan 90% Plate Median
+1	P	7	Morethan Plate Median
+1	A	8	Morethan Plate Median
+1	B	8	Morethan Plate Median
+1	C	8	Morethan Plate Median
+1	D	8	Lessthan Plate Median
+1	E	8	Lessthan Plate Median
+1	F	8	Morethan Plate Median
+1	G	8	Lessthan Plate Median
+1	H	8	Morethan Plate Median
+1	I	8	Morethan Plate Median
+1	J	8	Morethan Plate Median
+1	K	8	Morethan 90% Plate Median
+1	L	8	Morethan Plate Median
+1	M	8	Morethan Plate Median
+1	N	8	Morethan 90% Plate Median
+1	O	8	Morethan Plate Median
+1	P	8	Lessthan Plate Median
+1	A	9	Morethan Plate Median
+1	B	9	Morethan 90% Plate Median
+1	C	9	Morethan Plate Median
+1	D	9	Lessthan Plate Median
+1	E	9	Morethan Plate Median
+1	F	9	Morethan Plate Median
+1	G	9	Morethan 90% Plate Median
+1	H	9	Lessthan Plate Median
+1	I	9	Lessthan Plate Median
+1	J	9	Lessthan Plate Median
+1	K	9	Lessthan 25% Plate Median
+1	L	9	Lessthan Plate Median
+1	M	9	Lessthan Plate Median
+1	N	9	Lessthan Plate Median
+1	O	9	Lessthan 25% Plate Median
+1	P	9	Lessthan Plate Median
+1	A	10	Pinning Error
+1	B	10	Pinning Error
+1	C	10	Pinning Error
+1	D	10	Pinning Error
+1	E	10	Pinning Error
+1	F	10	Pinning Error
+1	G	10	Pinning Error
+1	H	10	Lessthan 25% Plate Median
+1	I	10	Pinning Error
+1	J	10	Pinning Error
+1	K	10	Empty
+1	L	10	Empty
+1	M	10	Morethan Plate Median
+1	N	10	Lessthan Plate Median
+1	O	10	Lessthan Plate Median
+1	P	10	Morethan Plate Median
+1	A	11	Morethan 90% Plate Median
+1	B	11	Morethan Plate Median
+1	C	11	Morethan Plate Median
+1	D	11	Lessthan Plate Median
+1	E	11	Morethan Plate Median
+1	F	11	Lessthan Plate Median
+1	G	11	Lessthan Plate Median
+1	H	11	Morethan Plate Median
+1	I	11	Pinning Error
+1	J	11	Pinning Error
+1	K	11	Pinning Error
+1	L	11	Pinning Error
+1	M	11	Morethan Plate Median
+1	N	11	Morethan 90% Plate Median
+1	O	11	Morethan Plate Median
+1	P	11	Morethan 90% Plate Median
+1	A	12	Lessthan Plate Median
+1	B	12	Lessthan Plate Median
+1	C	12	Lessthan Plate Median
+1	D	12	Lessthan Plate Median
+1	E	12	Lessthan 25% Plate Median
+1	F	12	Morethan Plate Median
+1	G	12	Morethan Plate Median
+1	H	12	Lessthan Plate Median
+1	I	12	Lessthan Plate Median
+1	J	12	Lessthan Plate Median
+1	K	12	Lessthan Plate Median
+1	L	12	Lessthan 25% Plate Median
+1	M	12	Lessthan Plate Median
+1	N	12	Morethan 90% Plate Median
+1	O	12	Morethan 90% Plate Median
+1	P	12	Morethan Plate Median
+1	A	13	Morethan 90% Plate Median
+1	B	13	Morethan Plate Median
+1	C	13	Morethan Plate Median
+1	D	13	Morethan Plate Median
+1	E	13	Lessthan Plate Median
+1	F	13	Lessthan Plate Median
+1	G	13	Lessthan Plate Median
+1	H	13	Lessthan Plate Median
+1	I	13	Morethan Plate Median
+1	J	13	Morethan Plate Median
+1	K	13	Morethan Plate Median
+1	L	13	Morethan Plate Median
+1	M	13	Morethan 90% Plate Median
+1	N	13	Lessthan Plate Median
+1	O	13	Lessthan Plate Median
+1	P	13	Lessthan Plate Median
+1	A	14	Lessthan Plate Median
+1	B	14	Morethan Plate Median
+1	C	14	Lessthan Plate Median
+1	D	14	Lessthan Plate Median
+1	E	14	Morethan Plate Median
+1	F	14	Morethan Plate Median
+1	G	14	Lessthan Plate Median
+1	H	14	Morethan Plate Median
+1	I	14	Lessthan Plate Median
+1	J	14	Morethan Plate Median
+1	K	14	Lessthan Plate Median
+1	L	14	Morethan Plate Median
+1	M	14	Lessthan Plate Median
+1	N	14	Pinning Error
+1	O	14	Pinning Error
+1	P	14	Lessthan 25% Plate Median
+1	A	15	Morethan 90% Plate Median
+1	B	15	Morethan 90% Plate Median
+1	C	15	Lessthan Plate Median
+1	D	15	Lessthan Plate Median
+1	E	15	Morethan Plate Median
+1	F	15	Lessthan Plate Median
+1	G	15	Morethan Plate Median
+1	H	15	Morethan Plate Median
+1	I	15	Morethan Plate Median
+1	J	15	Lessthan Plate Median
+1	K	15	Morethan Plate Median
+1	L	15	Lessthan Plate Median
+1	M	15	Morethan Plate Median
+1	N	15	Lessthan Plate Median
+1	O	15	Morethan Plate Median
+1	P	15	Morethan Plate Median
+1	A	16	Morethan Plate Median
+1	B	16	Morethan Plate Median
+1	C	16	Lessthan Plate Median
+1	D	16	Lessthan Plate Median
+1	E	16	Morethan Plate Median
+1	F	16	Lessthan Plate Median
+1	G	16	Morethan Plate Median
+1	H	16	Lessthan Plate Median
+1	I	16	Morethan Plate Median
+1	J	16	Lessthan Plate Median
+1	K	16	Morethan Plate Median
+1	L	16	Morethan Plate Median
+1	M	16	Lessthan Plate Median
+1	N	16	Lessthan Plate Median
+1	O	16	Lessthan Plate Median
+1	P	16	Lessthan Plate Median
+1	A	17	Morethan Plate Median
+1	B	17	Morethan Plate Median
+1	C	17	Morethan 90% Plate Median
+1	D	17	Lessthan Plate Median
+1	E	17	Morethan Plate Median
+1	F	17	Lessthan Plate Median
+1	G	17	Lessthan Plate Median
+1	H	17	Morethan Plate Median
+1	I	17	Empty
+1	J	17	Empty
+1	K	17	Empty
+1	L	17	Lessthan Plate Median
+1	M	17	Morethan Plate Median
+1	N	17	Lessthan Plate Median
+1	O	17	Morethan Plate Median
+1	P	17	Pinning Error
+1	A	18	Lessthan Plate Median
+1	B	18	Morethan Plate Median
+1	C	18	Pinning Error
+1	D	18	Morethan Plate Median
+1	E	18	Lessthan Plate Median
+1	F	18	Lessthan Plate Median
+1	G	18	Morethan Plate Median
+1	H	18	Morethan Plate Median
+1	I	18	Lessthan Plate Median
+1	J	18	Morethan 90% Plate Median
+1	K	18	Morethan 90% Plate Median
+1	L	18	Morethan Plate Median
+1	M	18	Lessthan Plate Median
+1	N	18	Morethan Plate Median
+1	O	18	Morethan Plate Median
+1	P	18	Morethan 90% Plate Median
+1	A	19	Lessthan Plate Median
+1	B	19	Lessthan Plate Median
+1	C	19	Lessthan Plate Median
+1	D	19	Lessthan Plate Median
+1	E	19	Lessthan 25% Plate Median
+1	F	19	Lessthan 25% Plate Median
+1	G	19	Lessthan Plate Median
+1	H	19	Morethan Plate Median
+1	I	19	Morethan Plate Median
+1	J	19	Lessthan Plate Median
+1	K	19	Lessthan Plate Median
+1	L	19	Morethan Plate Median
+1	M	19	Morethan 90% Plate Median
+1	N	19	Morethan 90% Plate Median
+1	O	19	Lessthan Plate Median
+1	P	19	Lessthan Plate Median
+1	A	20	Morethan Plate Median
+1	B	20	Morethan 90% Plate Median
+1	C	20	Lessthan Plate Median
+1	D	20	Morethan Plate Median
+1	E	20	Lessthan Plate Median
+1	F	20	Morethan Plate Median
+1	G	20	Lessthan Plate Median
+1	H	20	Morethan Plate Median
+1	I	20	Lessthan Plate Median
+1	J	20	Morethan Plate Median
+1	K	20	Lessthan Plate Median
+1	L	20	Morethan Plate Median
+1	M	20	Morethan Plate Median
+1	N	20	Lessthan Plate Median
+1	O	20	Morethan Plate Median
+1	P	20	Lessthan Plate Median
+1	A	21	Morethan Plate Median
+1	B	21	Morethan 90% Plate Median
+1	C	21	Morethan Plate Median
+1	D	21	Morethan 90% Plate Median
+1	E	21	Morethan 90% Plate Median
+1	F	21	Morethan Plate Median
+1	G	21	Morethan 90% Plate Median
+1	H	21	Morethan Plate Median
+1	I	21	Lessthan Plate Median
+1	J	21	Morethan Plate Median
+1	K	21	Lessthan Plate Median
+1	L	21	Morethan Plate Median
+1	M	21	Lessthan Plate Median
+1	N	21	Morethan Plate Median
+1	O	21	Lessthan Plate Median
+1	P	21	Morethan Plate Median
+1	A	22	Morethan Plate Median
+1	B	22	Morethan 90% Plate Median
+1	C	22	Morethan Plate Median
+1	D	22	Lessthan Plate Median
+1	E	22	Morethan Plate Median
+1	F	22	Morethan 90% Plate Median
+1	G	22	Morethan Plate Median
+1	H	22	Lessthan Plate Median
+1	I	22	Lessthan Plate Median
+1	J	22	Lessthan Plate Median
+1	K	22	Lessthan Plate Median
+1	L	22	Morethan 90% Plate Median
+1	M	22	Morethan 90% Plate Median
+1	N	22	Morethan Plate Median
+1	O	22	Morethan Plate Median
+1	P	22	Morethan Plate Median
+1	A	23	Lessthan 25% Plate Median
+1	B	23	Lessthan 25% Plate Median
+1	C	23	Pinning Error
+1	D	23	Morethan Plate Median
+1	E	23	Lessthan Plate Median
+1	F	23	Morethan Plate Median
+1	G	23	Morethan 90% Plate Median
+1	H	23	Morethan Plate Median
+1	I	23	Morethan Plate Median
+1	J	23	Lessthan Plate Median
+1	K	23	Pinning Error
+1	L	23	Morethan Plate Median
+1	M	23	Morethan Plate Median
+1	N	23	Morethan Plate Median
+1	O	23	Lessthan 25% Plate Median
+1	P	23	Lessthan Plate Median
+1	A	24	Lessthan Plate Median
+1	B	24	Lessthan Plate Median
+1	C	24	Morethan Plate Median
+1	D	24	Morethan 90% Plate Median
+1	E	24	Morethan 90% Plate Median
+1	F	24	Morethan Plate Median
+1	G	24	Morethan Plate Median
+1	H	24	Empty
+1	I	24	Lessthan 25% Plate Median
+1	J	24	Lessthan 25% Plate Median
+1	K	24	Morethan Plate Median
+1	L	24	Morethan Plate Median
+1	M	24	Morethan 90% Plate Median
+1	N	24	Morethan Plate Median
+1	O	24	Lessthan Plate Median
+1	P	24	Empty
