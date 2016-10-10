@@ -6,43 +6,57 @@
 #' the value in \code{plateformat}
 #'
 #' @param plateformat An integer which can be one of 96 or 384 or 1536 or 6144
-#' @param data_from vector of data for conversion
-#' @param is_plate_coords logical returns plate coordinates, if its value is
-#' \code{TRUE}.
-#' @param out_data_flow A string which tells the function to output the
-#' converted data to a plate configuration which can be down or across.
+#' @param data_from data vector required for conversion
+#' @param is_plate_coords logical returns plate coordinates, if its \code{TRUE}
+#' @param in_data_flow A string indicating the format of the given data in
+#' \code{data_from}. It can take a value of either down or across.
+#' @param out_data_flow A string indicating the function to output the data to
+#' a desired format. It can take a value either of down or across.
 #'
 #' @return dataframe of converted data from across to down or vice versa.
 #'
 #' @export
 #'
 #' @examples
-#' plateformat <- 384
-#' convert_down_across(plateformat = plateformat,
-#'                     data_from = 1:plateformat,
+#' convert_down_across(plateformat = 384,
+#'                     data_from = 1:384,
 #'                     is_plate_coords = TRUE,
+#'                     in_data_flow = 'down',
 #'                     out_data_flow = 'across')
+#'
 convert_down_across <- function(plateformat,
                                 data_from,
                                 is_plate_coords = TRUE,
+                                in_data_flow,
                                 out_data_flow)
 {
-  if(!is.vector(data_from) && length(data_from) != plateformat){
-    stop(paste('data_from must be a vector and its length must be equal to',
-               plateformat, sep=''))
+  stopifnot(is.numeric(plateformat) && length(plateformat) == 1)
+  stopifnot((is.vector(data_from) && length(data_from) == plateformat) ||
+             (is.data.frame(data_from) && nrow(data_from) == plateformat))
+  stopifnot(length(in_data_flow) == 1 || length(out_data_flow) == 1)
+  stopifnot(in_data_flow %in% c('down', 'across'))
+  stopifnot(out_data_flow %in% c('down', 'across'))
+  stopifnot(is.logical(is_plate_coords))
+
+  df1 <- plate_coords(plate_to = plateformat,
+                      data_from = data_from,
+                      data_format = in_data_flow)
+
+  if(in_data_flow != out_data_flow){
+    if(out_data_flow == 'across'){
+      df1$row <- factor(df1$row, levels = unique(df1$row), ordered = TRUE)
+      df1 <- df1[with(df1, order(row, decreasing = FALSE)), ]
+      df1$row <- as.character(df1$row)
+
+    } else if(out_data_flow == 'down'){
+      df1 <- df1[with(df1, order(column, decreasing = FALSE)), ]
+    }
   }
 
-  if(out_data_flow == 'down' || out_data_flow == 'across') {
-    if(!is.logical(is_plate_coords)){
-      stop('is_plate_coords must be a logical value with TRUE or FALSE')
-    }
-
-    if(is_plate_coords){
-      return(plate_coords(plateformat, data_from, out_data_flow))
-    } else {
-      return(data_from)
-    }
-  } else {
-    stop('out_data_flow argument values must be either down or across')
+  if(!is_plate_coords){
+    df1$row <- NULL
+    df1$column <- NULL
   }
+
+  return(df1)
 }
