@@ -11,7 +11,9 @@ neighborless_algorithm(plateformat, colony_area_raw_data, empty_indices,
 \item{plateformat}{An integer which can be one of 96 or 384 or 1536.}
 
 \item{colony_area_raw_data}{A numeric vector of raw data representing the area
-yeast grown at a specific location on a nutrient medium agar plate}
+yeast grown at a specific location on a nutrient medium agar plate. The data can
+be either rowwise or columnwise and its arrangement does not influence the
+outcome of this algorithm.}
 
 \item{empty_indices}{A numeric vector of indexed empty locations. It can also
 be the indices of control colonies grown on a plate, which may be used for
@@ -38,18 +40,22 @@ zero, then the algorithm concludes it as one of excluded colonies.
 }
 \examples{
 plateformat <- 1536
-data_subtypes_384 <- colonyarea$data_subtypes
-data_area <- simulated_data_1536(data_subtypes_384,
-                                 out_data_flow = "across",
+data_area <- simulated_data_1536(data_384 = colonyarea$data_subtypes,
+                                 in_data_flow = "across",
+                                 out_data_flow = "down",
                                  is_plate_coords = TRUE)
-empty_indices <- which(convert_small_to_large(384,
-                                              1536,
-                                              data_subtypes_384,
-                                              "across",
-                                               FALSE)$y \%in\% 'Empty')
+empty_indices <- which(convert_small_to_large(plate_from = 384,
+                                              plate_to = 1536,
+                                              data_from = colonyarea$data_subtypes,
+                                              in_data_flow = 'across',
+                                              out_data_flow = "down",
+                                              is_plate_coords = FALSE)$y \%in\% 'Empty')
 (neighborless_algorithm(plateformat          = 1536,
                         colony_area_raw_data = data_area$y,
                         empty_indices        = empty_indices,
-                        excluded_colonies    = c()))
+                        excluded_colonies    = c(),
+                        is_save              = FALSE,
+                        excluded_file        = NULL))
+
 }
 

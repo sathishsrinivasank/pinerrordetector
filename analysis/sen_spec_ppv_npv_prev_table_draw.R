@@ -29,7 +29,7 @@ sen_spec_ppv_npv_prev_table_draw <- function(row_names_titles,
 
     pdf(file = paste(file_save_path, '.pdf', sep=''),
         height = 3,
-        width = 9)
+        width = 9.5)
 
     grid.table(sen_spec_all)
 

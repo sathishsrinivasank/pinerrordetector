@@ -1,24 +1,23 @@
-get_gtree_table <- function(data_sens_spec, row_names, title_text, footnote_text='')
+get_gtree_table <- function(data_sens_spec, row_names, title_text)
 {
   row.names(data_sens_spec) <- row_names
 
-  tgrob = tableGrob(data_sens_spec)
-
-  h = grobHeight(tgrob)
-
-  w = grobWidth(tgrob)
+  table = tableGrob(data_sens_spec)
 
   title = textGrob(title_text,
-                   y = (unit(0.5,"npc") + (0.5 * h)),
-                   vjust = 0,
                    gp = gpar(fontsize=20))
 
-  footnote <- textGrob(footnote_text,
-                       x = (unit(0.5,"npc") - (0.5 * w)),
-                       y = (unit(0.5,"npc") - (0.5 * h)),
-                       vjust = 1,
-                       hjust = 0,
-                       gp = gpar( fontface="italic"))
-
-  return(gTree(children=gList(tgrob, title, footnote)))
+  padding <- unit(8,"mm")
+  
+  table <- gtable_add_rows(x = table, 
+                           heights = grobHeight(title) + padding,
+                           pos = 0)
+  table <- gtable_add_grob(x = table,
+                           grobs = title, 
+                           t = 1,
+                           l = 2,
+                           b = 0.5,
+                           r = ncol(table))
+  
+  return(gTree(children=gList(table)))
 }

@@ -1,13 +1,15 @@
 Package: pinerrordetector
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1
-Date: 2015-11-03
+Title: Detection of Pinning Errors of Robotic Machines used in SGA Yeast Screen
+Version: 0.2
+Date: 2016-10-10
 Author: Sathish Kumar Srinivasan
-Maintainer: Who to complain to <sathishsrinivasank@gmail.com>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Maintainer: Sathish Kumar Srinivasan <sathishsrinivasank@gmail.com>
+Depends: R (>= 2.10) 
+Description: pinerrordetector package is used to identify the locations of pinning errors occur while using robotic machines for Yeast SGA Screening Method. It implements two algorithms, such as neighborless and neighborful algorithm. 
+License: MIT | file LICENSE
 LazyData: TRUE
+NeedsCompilation: no
 Suggests:
     testthat
 RoxygenNote: 5.0.1

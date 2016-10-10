@@ -17,7 +17,7 @@
 #' normalizing the colony area of a plate
 #' @param param1_threshold The numeric value which can be one from \code{1:8}.
 #' This exclusion criteria-1 of neighborful algorithm represents the number of
-#' adjoining neighbors of the selected colony from \code{colony_indices} that
+#' adjoining neighbors of the selected colony from \code{colony} that
 #' has colony area less than or equal to \code{plate_median_threshold}. If the
 #' selected colony is surrounded by at least \code{param1_threshold} neighbors,
 #' then it will be considered as excluded colony by the neighborful algorithm
@@ -33,20 +33,28 @@
 #' @examples
 #' plateformat <- 1536
 #' middle_colony <- 34
-#' param1_threshold <- 1
-#' param2_threshold <- 1
+#' param1_threshold <- 6
+#' param2_threshold <- 2
 #' neighbors_selected_colony <- middle_neighbors(plateformat, middle_colony)
 #' combin_coords <- combn(length(neighbors_selected_colony), param1_threshold)
-#' data_area <- simulated_data_1536(colonyarea$data_subtypes)
-#' empty_indices <- which(convert_384_to_1536_data(colonyarea$data_subtypes)
-#'                        %in% 'Empty')
-#' p_median <- plate_median(empty_indices, data_area)
+#' data_area <- simulated_data_1536(data_384 = colonyarea$data_subtypes,
+#'                                  in_data_flow = "across",
+#'                                  out_data_flow = "down",
+#'                                  is_plate_coords = TRUE)
+#' empty_indices <- which(convert_small_to_large(plate_from = 384,
+#'                                               plate_to = 1536,
+#'                                               data_from = colonyarea$data_subtypes,
+#'                                               in_data_flow = 'across',
+#'                                               out_data_flow = "down",
+#'                                               is_plate_coords = FALSE)$y %in% 'Empty')
+#' p_median <- plate_median(empty_indices = empty_indices,
+#'                          colony_area_raw_data = data_area$y)
 #' plate_median_threshold <- p_median/4
 #' variation1(colony = middle_colony,
 #'            combin_coords = combin_coords,
 #'            neighbors_selected_colony = neighbors_selected_colony,
 #'            excluded_colonies = c(2),
-#'            colony_area_raw_data = data_area,
+#'            colony_area_raw_data = data_area$y,
 #'            plate_median_threshold = plate_median_threshold,
 #'            empty_indices = empty_indices,
 #'            param1_threshold = param1_threshold,
@@ -64,39 +72,39 @@ variation1 <- function(colony,
   for(combin_coords_index in 1:ncol(combin_coords)){
     combinations <- combin_coords[,combin_coords_index]
 
-    # get neighbor indices
+    # 1. get neighbor indices
     combinations <- neighbors_selected_colony[combinations]
 
-    # remove indexed empty spots
+    # 2. remove indexed empty spots from the neighbors of selected colony
     combinations <- combinations[which(! combinations %in% empty_indices)]
 
     if(length(combinations) == 0){
       next
     }
 
-    # Apply parameter 1
-    excluded_colonies_param1 <- parameter1(colony,
-                                           combinations,
-                                           colony_area_raw_data,
-                                           plate_median_threshold,
-                                           excluded_colonies,
-                                           param1_threshold)
+    # 3. Apply parameter 1
+    excluded_colonies_param1 <- parameter1(colony = colony,
+                                           combinations = combinations,
+                                           colony_area_raw_data = colony_area_raw_data,
+                                           plate_median_threshold = plate_median_threshold,
+                                           excluded_colonies = excluded_colonies,
+                                           param1_threshold = param1_threshold)
     if(excluded_colonies_param1[1] != -1){
       excluded_colonies <- excluded_colonies_param1
-
       break()
     }
 
-    # Apply parameter 2
-    excluded_colonies_param2 <- parameter2(colony,
-                                           combinations,
-                                           excluded_colonies,
-                                           param2_threshold)
+    # 4. Apply parameter 2
+    excluded_colonies_param2 <- parameter2(colony = colony,
+                                           combinations = combinations,
+                                           excluded_colonies = excluded_colonies,
+                                           param2_threshold = param2_threshold)
     if(excluded_colonies_param2[1] != -1){
       excluded_colonies <- excluded_colonies_param2
-
       break()
     }
   }
+
+  # 5. return excluded colonies
   return(excluded_colonies)
 }

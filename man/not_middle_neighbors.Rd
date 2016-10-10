@@ -21,6 +21,8 @@ Neighbors adjoining the selected colony from the periphery of the given
 plateformat
 }
 \examples{
-not_middle_neighbors(plateformat, 1)
+not_middle_neighbors(96, 1)
+#' not_middle_neighbors(1536, 1)
+
 }
 

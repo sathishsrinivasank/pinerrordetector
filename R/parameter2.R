@@ -9,7 +9,7 @@
 #' colonies
 #' @param param2_threshold The numeric value which can be one from \code{1:8}.
 #' This exclusion criteria-2 of neighborful algorithm represents the number of
-#' adjoing neighbors of the selected colony from \code{colony_indices} are
+#' adjoing neighbors of the selected colony from \code{colony} are
 #' excluded by the previous iteration of neighborful algorithm. If the selected
 #' colony is surrounded by at least \code{param2_threshold} neighbors, then it
 #' will be considered as excluded colony by the neighborful algorithm.
@@ -20,9 +20,10 @@
 #'
 #' @examples
 #' middle_colony <- 34
-#' param2_threshold <- 1
+#' param1_threshold <- 6
+#' param2_threshold <- 2
 #' neighbors_selected_colony <- middle_neighbors(plateformat, middle_colony)
-#' combin_coords <- combn(length(neighbors_selected_colony), 1)
+#' combin_coords <- combn(length(neighbors_selected_colony), param1_threshold)
 #' combinations <- neighbors_selected_colony[(combin_coords[,1])]
 #' parameter2(colony = middle_colony,
 #'            combinations = combinations,
@@ -30,10 +31,10 @@
 #'            param2_threshold = param2_threshold)
 parameter2 <- function(colony,
                        combinations,
-                       excluded_colonies = c(2),
-                       param2_threshold = param2_threshold)
+                       excluded_colonies,
+                       param2_threshold)
 {
-  if (length(which(excluded_colonies %in% combinations)) >= param2_threshold) {
+  if (length(intersect(excluded_colonies, combinations)) >= param2_threshold) {
     return(unique(c(excluded_colonies, colony)))
   } else {
     return(-1)

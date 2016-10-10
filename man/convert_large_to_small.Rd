@@ -4,8 +4,8 @@
 \alias{convert_large_to_small}
 \title{Convert data of large plateformat to small plateformat}
 \usage{
-convert_large_to_small(plate_from, plate_to, data_from, out_data_flow,
-  is_plate_coords, is_means)
+convert_large_to_small(plate_from, plate_to, data_from, in_data_flow,
+  out_data_flow, is_plate_coords)
 }
 \arguments{
 \item{plate_from}{An integer of large plateformat}
@@ -14,14 +14,14 @@ convert_large_to_small(plate_from, plate_to, data_from, out_data_flow,
 
 \item{data_from}{vector of data for conversion}
 
+\item{in_data_flow}{A string indicating the plate format of \code{data_from}.
+It can take a value either across or down.}
+
 \item{out_data_flow}{A string which tells the function to output the
 converted data to a plate configuration which can be down or across}
 
 \item{is_plate_coords}{logical returns plate coordinates, if its value is
 \code{TRUE}}
-
-\item{is_means}{logical if its value is \code{TRUE}, it converts four
-replicates into its average after removing any NA values}
 }
 \value{
 dataframe of converted data from large plateformat \code{plate_from}
@@ -38,22 +38,13 @@ Always convert the plateformat one step at a time. For example 1536 to 384
 but not from 1536 to 96 plateformat
 }
 \examples{
-across_384 <- convert_large_to_small(plate_from = 1536,
-                                     plate_to = 384,
-                                     data_from = 1:1536,
-                                     out_data_flow = 'across',
-                                     is_plate_coords = TRUE,
-                                     is_means = FALSE)
-head(across_384)
-
-# convert replicates into mean after removing NAs
-across_384 <- convert_large_to_small(plate_from = 1536,
-                                     plate_to = 384,
-                                     data_from = 1:1536,
-                                     out_data_flow = 'across',
-                                     is_plate_coords = TRUE,
-                                     is_means = TRUE)
-head(across_384)
+down_384 <- convert_large_to_small(plate_from = 1536,
+                                   plate_to = 384,
+                                   data_from = 1:1536,
+                                   in_data_flow = 'down',
+                                   out_data_flow = 'down',
+                                   is_plate_coords = TRUE)
+head(down_384)
 
 }
 

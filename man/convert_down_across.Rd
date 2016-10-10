@@ -5,18 +5,20 @@
 \title{Convert data into rowwise(across) or coloumnwise(down) within a plate format}
 \usage{
 convert_down_across(plateformat, data_from, is_plate_coords = TRUE,
-  out_data_flow)
+  in_data_flow, out_data_flow)
 }
 \arguments{
 \item{plateformat}{An integer which can be one of 96 or 384 or 1536 or 6144}
 
-\item{data_from}{vector of data for conversion}
+\item{data_from}{data vector required for conversion}
 
-\item{is_plate_coords}{logical returns plate coordinates, if its value is
-\code{TRUE}.}
+\item{is_plate_coords}{logical returns plate coordinates, if its \code{TRUE}}
 
-\item{out_data_flow}{A string which tells the function to output the
-converted data to a plate configuration which can be down or across.}
+\item{in_data_flow}{A string indicating the format of the given data in
+\code{data_from}. It can take a value of either down or across.}
+
+\item{out_data_flow}{A string indicating the function to output the data to
+a desired format. It can take a value either of down or across.}
 }
 \value{
 dataframe of converted data from across to down or vice versa.
@@ -29,10 +31,36 @@ Make sure the length of the given data in \code{data_from} argument matches
 the value in \code{plateformat}
 }
 \examples{
+legend_txt_bg_col <- c('Empty'                     = 'red',
+                       'Pinning Error'             = 'black',
+                       'Morethan Plate Median'     = '#660066',
+                       'Lessthan Plate Median'     = 'green',
+                       'Morethan 90\% Plate Median' = 'cyan',
+                       'Lessthan 25\% Plate Median' = 'yellow',
+                       'Excluded Colonies'         = 'blue')
 plateformat <- 384
-convert_down_across(plateformat = plateformat,
-                    data_from = 1:plateformat,
-                    is_plate_coords = TRUE,
-                    out_data_flow = 'across')
+across_384 <- convert_down_across(plateformat = plateformat,
+                                  data_from = colonyarea$data_subtypes,
+                                  is_plate_coords = TRUE,
+                                  in_data_flow = 'across',
+                                  out_data_flow = 'across')
+
+plot_platemap(plateformat = plateformat,
+              plot_data = across_384,
+              legend_txt_bg_col = legend_txt_bg_col)
+
+# Note the data structure is not disturbed after converting
+# rowwise(across) to columnwise(down). Also, try in_data_flow = 'down'
+
+across_down_384 <- convert_down_across(plateformat = plateformat,
+                                       data_from = colonyarea$data_subtypes,
+                                       is_plate_coords = TRUE,
+                                       in_data_flow = 'across',
+                                       out_data_flow = 'down')
+
+plot_platemap(plateformat = plateformat,
+              plot_data = across_down_384,
+              legend_txt_bg_col = legend_txt_bg_col)
+
 }
 

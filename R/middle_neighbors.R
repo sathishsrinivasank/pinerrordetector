@@ -13,7 +13,6 @@
 #' all_indices <- 1:plateformat
 #' middle_colony_indices <- all_indices[-(not_middle_indices(plateformat))]
 #' middle_colony <- middle_colony_indices[1]
-#' middle_colony
 #' middle_neighbors(plateformat, middle_colony)
 middle_neighbors <- function(plateformat, n)
 {

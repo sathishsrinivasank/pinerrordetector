@@ -4,8 +4,7 @@
 \alias{parameter2}
 \title{Exclusion Criteria-2 of Neighborful Algorithm}
 \usage{
-parameter2(colony, combinations, excluded_colonies = c(2),
-  param2_threshold = param2_threshold)
+parameter2(colony, combinations, excluded_colonies, param2_threshold)
 }
 \arguments{
 \item{colony}{selected colony by the outer loop of the neighborful algorithm}
@@ -17,7 +16,7 @@ colonies}
 
 \item{param2_threshold}{The numeric value which can be one from \code{1:8}.
 This exclusion criteria-2 of neighborful algorithm represents the number of
-adjoing neighbors of the selected colony from \code{colony_indices} are
+adjoing neighbors of the selected colony from \code{colony} are
 excluded by the previous iteration of neighborful algorithm. If the selected
 colony is surrounded by at least \code{param2_threshold} neighbors, then it
 will be considered as excluded colony by the neighborful algorithm.}
@@ -33,9 +32,10 @@ neighbors adjoining the selected colony
 }
 \examples{
 middle_colony <- 34
-param2_threshold <- 1
+param1_threshold <- 6
+param2_threshold <- 2
 neighbors_selected_colony <- middle_neighbors(plateformat, middle_colony)
-combin_coords <- combn(length(neighbors_selected_colony), 1)
+combin_coords <- combn(length(neighbors_selected_colony), param1_threshold)
 combinations <- neighbors_selected_colony[(combin_coords[,1])]
 parameter2(colony = middle_colony,
            combinations = combinations,

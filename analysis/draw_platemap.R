@@ -2,19 +2,22 @@
 draw_platemap <- function(plateformat,
                           categorized_data,
                           legend_txt_bg_col,
-                          data_flow = 'down',
+                          data_flow = out_data_flow,
                           symbol_size,
                           is_neighborful = FALSE, ...)
 {
-
+  # 1. sanity checks
+  stopifnot(is.vector(categorized_data) && is.character(categorized_data))
+  
   dir_var <- dir_setup(is_neighborful)
 
   # draw template platemap
   PDF_TEMPLATE <- paste(sub('/neighborful/platemaps', '', dir_var[[3]]),
                         'template_platemap.pdf',
                         sep = '/')
-  plate_data <- data.frame(plate_data = categorized_data,
-                           stringsAsFactors = FALSE)
+  plot_data <- plate_coords(plate_to = plateformat,
+                            data_from = categorized_data,
+                            data_format = data_flow)
   las2 <- 2
   las3 <- 0
   cex_axis <- 1.2
@@ -29,7 +32,7 @@ draw_platemap <- function(plateformat,
   pdf(file = PDF_TEMPLATE, width = 13, height = 9)
 
   plot_platemap(plateformat = plateformat,
-                plate_data = plate_data,
+                plot_data = plot_data,
                 data_flow = data_flow,
                 legend_txt_bg_col = legend_txt_bg_col,
                 las2 = las2,
@@ -97,13 +100,14 @@ draw_platemap <- function(plateformat,
           for(exc_list_count in 1:len_excluded_all){
             excluded_indices <- excluded_all[[exc_list_count]][[1]]
 
-            plate_data <- categorized_data
+            plot_data <- categorized_data
 
-            plate_data[excluded_indices] <- 'Excluded Colonies'
+            plot_data[excluded_indices] <- 'Excluded Colonies'
 
 
-            plate_data <- data.frame(plate_data = plate_data,
-                                     stringsAsFactors = FALSE)
+            plot_data <- plate_coords(plate_to = plateformat,
+                                      data_from = plot_data,
+                                      data_format = data_flow)
             las2 <- 2
             las3 <- 0
             cex_axis <- 1.2
@@ -116,7 +120,7 @@ draw_platemap <- function(plateformat,
             legend_text_size <- 1.2
 
             plot_platemap(plateformat = plateformat,
-                          plate_data = plate_data,
+                          plot_data = plot_data,
                           data_flow = data_flow,
                           legend_txt_bg_col = legend_txt_bg_col,
                           las2 = las2,

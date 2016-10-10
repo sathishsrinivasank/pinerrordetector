@@ -20,9 +20,9 @@ yeast grown at a specific location on a nutrient medium agar plate}
 \item{excluded_colonies}{A numeric vector of indices that are part of excluded
 colonies}
 
-\item{param1_threshold}{The numeric value which can be one from \code{1:8}.
+\item{param1_threshold}{The numerical value which can be one from \code{1:8}.
 This exclusion criteria-1 of neighborful algorithm represents the number of
-adjoining neighbors of the selected colony from \code{colony_indices} that
+adjoining neighbors of the selected colony from \code{colony} that
 has colony area less than or equal to \code{plate_median_threshold}. If the
 selected colony is surrounded by at least \code{param1_threshold} neighbors,
 then it will be considered as excluded colony by the neighborful algorithm}
@@ -34,22 +34,31 @@ Else, it will return -1.
 }
 \description{
 Exclusion Criteria-1 used in neighborful algorithm on combinations of
-neighbors adjoining the selected colony
+neighbors adjoining the selected colony. See \code{help(neighborful_algorithm)}
 }
 \examples{
+plateformat <- 1536
 middle_colony <- 34
-param1_threshold <- 1
+param1_threshold <- 6
 neighbors_selected_colony <- middle_neighbors(plateformat, middle_colony)
-combin_coords <- combn(length(neighbors_selected_colony), 1)
+combin_coords <- combn(length(neighbors_selected_colony), param1_threshold)
 combinations <- neighbors_selected_colony[(combin_coords[,1])]
-data_area <- simulated_data_1536(colonyarea$data_subtypes)
-empty_indices <- which(convert_384_to_1536_data(colonyarea$data_subtypes)
-                       \%in\% 'Empty')
-p_median <- plate_median(empty_indices, data_area)
+data_area <- simulated_data_1536(data_384 = colonyarea$data_subtypes,
+                                 in_data_flow = "across",
+                                 out_data_flow = "down",
+                                 is_plate_coords = TRUE)
+empty_indices <- which(convert_small_to_large(plate_from = 384,
+                                              plate_to = 1536,
+                                              data_from = colonyarea$data_subtypes,
+                                              in_data_flow = 'across',
+                                              out_data_flow = "down",
+                                              is_plate_coords = FALSE)$y \%in\% 'Empty')
+p_median <- plate_median(empty_indices = empty_indices,
+                         colony_area_raw_data = data_area$y)
 plate_median_threshold <- p_median/4
 parameter1(colony = middle_colony,
            combinations = combinations,
-           colony_area_raw_data = data_area,
+           colony_area_raw_data = data_area$y,
            plate_median_threshold = plate_median_threshold,
            excluded_colonies = c(2),
            param1_threshold = param1_threshold)

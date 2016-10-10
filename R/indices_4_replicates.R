@@ -12,10 +12,15 @@
 #' @export
 #'
 #' @examples
-#' indices_384_96 <- indices_4_replicates(plate_from    = 384,
-#'                                        plate_to      = 96,
-#'                                        out_data_flow = 'across')
-#' head(indices_384_96)
+#' indices_384_96_across <- indices_4_replicates(plate_from    = 384,
+#'                                               plate_to      = 96,
+#'                                               out_data_flow = 'across')
+#' head(indices_384_96_across)
+#'
+#' indices_384_96_down <- indices_4_replicates(plate_from    = 384,
+#'                                             plate_to      = 96,
+#'                                             out_data_flow = 'down')
+#'
 indices_4_replicates <- function(plate_from,
                                  plate_to,
                                  out_data_flow)

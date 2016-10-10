@@ -40,18 +40,42 @@
 #'                        'Morethan 90% Plate Median' = 'cyan',
 #'                        'Lessthan 25% Plate Median' = 'yellow',
 #'                        'Excluded Colonies'         = 'blue')
+#' data_subtypes_384 <- colonyarea$data_subtypes
+#' across_1536 <- convert_small_to_large(plate_from = 384,
+#'                                       plate_to = 1536,
+#'                                       data_from = data_subtypes_384,
+#'                                       in_data_flow = 'across',
+#'                                       out_data_flow = 'across',
+#'                                       is_plate_coords = TRUE)
+#' across_down_1536 <- convert_small_to_large(plate_from = 384,
+#'                                            plate_to = 1536,
+#'                                            data_from = data_subtypes_384,
+#'                                            in_data_flow = 'across',
+#'                                            out_data_flow = 'down',
+#'                                            is_plate_coords = TRUE)
+#'
+#' down_1536 <- convert_small_to_large(plate_from = 384,
+#'                                       plate_to = 1536,
+#'                                       data_from = data_subtypes_384,
+#'                                       in_data_flow = 'down',
+#'                                       out_data_flow = 'down',
+#'                                       is_plate_coords = TRUE)
+#'
 #' # 384 plate format
 #' plateformat <- 384
-#' base_data <- colonyarea$data_subtypes
-#' across_384 <- convert_down_across(plateformat = plateformat,
-#'                                   data_from = base_data,
-#'                                   is_plate_coords = TRUE,
-#'                                   out_data_flow = 'across')
+#' across_384 <- convert_large_to_small(plate_from = 1536,
+#'                                      plate_to = 384,
+#'                                      data_from = across_1536$y,
+#'                                      in_data_flow = 'across',
+#'                                      out_data_flow = 'across',
+#'                                      is_plate_coords = TRUE)
 #'
-#' down_384 <- convert_down_across(plateformat = plateformat,
-#'                                 data_from = across_384[,3],
-#'                                 is_plate_coords = TRUE,
-#'                                 out_data_flow = 'down')
+#' down_384 <- convert_large_to_small(plate_from = 1536,
+#'                                      plate_to = 384,
+#'                                      data_from = down_1536$y,
+#'                                      in_data_flow = 'down',
+#'                                      out_data_flow = 'down',
+#'                                      is_plate_coords = TRUE)
 #'
 #' plot_platemap(plateformat = plateformat,
 #'               plot_data = across_384,
@@ -63,19 +87,12 @@
 #'
 #' # 1536 plate format
 #' plateformat <- 1536
-#' across_1536 <- convert_small_to_large(plate_from = 384,
-#'                                       plate_to = plateformat,
-#'                                       data_from = across_384[,3],
-#'                                       out_data_flow = 'across',
-#'                                       is_plate_coords = TRUE)
-#'
-#' down_1536 <- convert_down_across(plateformat = plateformat,
-#'                                  data_from = across_1536[,3],
-#'                                  is_plate_coords = TRUE,
-#'                                  out_data_flow = 'down')
-#'
 #' plot_platemap(plateformat = plateformat,
 #'               plot_data = across_1536,
+#'               legend_txt_bg_col = legend_txt_bg_col)
+#'
+#' plot_platemap(plateformat = plateformat,
+#'               plot_data = across_down_1536,
 #'               legend_txt_bg_col = legend_txt_bg_col)
 #'
 #' plot_platemap(plateformat = plateformat,
@@ -87,21 +104,14 @@
 #' across_6144 <- convert_small_to_large(plate_from = 1536,
 #'                                       plate_to = plateformat,
 #'                                       data_from = across_1536[,3],
+#'                                       in_data_flow = 'across',
 #'                                       out_data_flow = 'across',
 #'                                       is_plate_coords = TRUE)
-#'
-#' down_6144 <- convert_down_across(plateformat = plateformat,
-#'                                  data_from = across_6144[,3],
-#'                                  is_plate_coords = TRUE,
-#'                                  out_data_flow = 'down')
 #'
 #' plot_platemap(plateformat = plateformat,
 #'               plot_data = across_6144,
 #'               legend_txt_bg_col = legend_txt_bg_col)
 #'
-#' plot_platemap(plateformat = plateformat,
-#'               plot_data = down_6144,
-#'               legend_txt_bg_col = legend_txt_bg_col)
 plot_platemap <- function(plateformat,
                           plot_data,
                           legend_txt_bg_col,
@@ -118,6 +128,11 @@ plot_platemap <- function(plateformat,
                           legend_text_size = 1.2,
                           ...)
 {
+  # 1. sanity checks
+  stopifnot(is.data.frame(plot_data) && ncol(plot_data) == 3)
+  stopifnot(length(plateformat) == 1 &&
+              (is.numeric(plateformat) || is.integer(plateformat)))
+
   # get user graphical parameters and set it before exiting from this function
   op <- par(c('xpd', 'ann', 'cex.axis', 'las', 'bg', 'pch', 'cex', 'bty'))
   on.exit(par(op))

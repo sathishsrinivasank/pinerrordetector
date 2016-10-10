@@ -14,15 +14,32 @@
 #' @export
 #'
 #' @examples
-#' data_area <- simulated_data_1536(colonyarea$data_subtypes)
-#' empty_indices <- which(convert_384_to_1536_data(colonyarea$data_subtypes)
-#'                        %in% 'Empty')
-#' plate_median(empty_indices, data_area)
-plate_median <- function(empty_indices, colony_area_raw_data)
+#' data_area <- simulated_data_1536(data_384 = colonyarea$data_subtypes,
+#'                                  in_data_flow = "across",
+#'                                  out_data_flow = "down",
+#'                                  is_plate_coords = TRUE)
+#' empty_indices <- which(convert_small_to_large(plate_from = 384,
+#'                                               plate_to = 1536,
+#'                                               data_from = colonyarea$data_subtypes,
+#'                                               in_data_flow = 'across',
+#'                                               out_data_flow = "down",
+#'                                               is_plate_coords = FALSE)$y %in% 'Empty')
+#' plate_median(empty_indices, data_area$y)   # 600
+#'
+plate_median <- function(empty_indices = NULL, colony_area_raw_data, na.rm = TRUE)
 {
-  # first column of colony_area_raw_data: colony area
-  # second column of colony_area_raw_data: circularity
+  # 1. sanity checks
+  stopifnot(is.vector(colony_area_raw_data) &&
+              (is.numeric(colony_area_raw_data) ||
+                 is.integer(colony_area_raw_data)))
+  stopifnot(is.null(empty_indices) || (is.vector(empty_indices) &&
+                                         (is.numeric(empty_indices) ||
+                                            is.integer(empty_indices))))
 
-  return(median(colony_area_raw_data[-(empty_indices)],
-                na.rm = TRUE))
+  # 2. return plate median for colony size
+  if(is.null(empty_indices)){
+    return(median(colony_area_raw_data, na.rm = na.rm))
+  } else {
+    return(median(colony_area_raw_data[-unique(empty_indices)], na.rm = na.rm))
+  }
 }

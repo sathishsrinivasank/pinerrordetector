@@ -63,16 +63,18 @@ adjoining neighbors of a selected colony from the outer loop.
 }
 \examples{
 plateformat <- 1536
-data_subtypes_384 <- colonyarea$data_subtypes
-data_area <- simulated_data_1536(data_subtypes_384,
-                                 out_data_flow = "across",
+data_area <- simulated_data_1536(data_384 = colonyarea$data_subtypes,
+                                 in_data_flow = "across",
+                                 out_data_flow = "down",
                                  is_plate_coords = TRUE)
-empty_indices <- which(convert_small_to_large(384,
-                                              1536,
-                                              data_subtypes_384,
-                                              "across",
-                                               FALSE)$y \%in\% 'Empty')
-p_median <- 600
+empty_indices <- which(convert_small_to_large(plate_from = 384,
+                                              plate_to = plateformat,
+                                              data_from = colonyarea$data_subtypes,
+                                              in_data_flow = 'across',
+                                              out_data_flow = "down",
+                                              is_plate_coords = FALSE)$y \%in\% 'Empty')
+p_median <- plate_median(empty_indices = empty_indices,
+                         colony_area_raw_data = data_area$y)
 plate_median_threshold <- p_median/4
 all_indices <- 1:plateformat
 middle_colony_indices <- all_indices[-(not_middle_indices(plateformat))]

@@ -9,7 +9,9 @@
 #' @export
 #'
 #' @examples
-#' not_middle_neighbors(plateformat, 1)
+#' not_middle_neighbors(96, 1)
+#' #' not_middle_neighbors(1536, 1)
+#'
 not_middle_neighbors <- function(plateformat, colony)
 {
   p_nrow <- plate_nrow(plateformat)

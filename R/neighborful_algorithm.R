@@ -8,16 +8,22 @@
 #' of neighborful algorithm are based on
 #' \itemize{
 #'  \item{Which exclusion criteria is applied}
-#'  \item{Whether \code{empty_indices} is removed in the outer or inner loops of
+#'  \item{Whether \code{empty_indices} are removed in the outer or inner loops of
 #'        neighborful algorithm}
 #' }
 #'
-#' Two exclusion criteria are used to consider a colony as excluded colony.
+#' Two exclusion criteria are used to consider a colony as excluded colony. The
+#' two parameters used in the global exclusion algorithm of Dittmar et al., 2010
+#' are "If at least six out of eight neighboring colonies fall below 25% of
+#' the plate growth median (parameter 1) or at least two neighboring colonies
+#' have already been excluded (parameter 2), the program highlights the colony
+#' in red for exclusion". In addition, the excluded colony must have colony area
+#' less than the defined plate median threshold.
 #'
 #' The exclusion criteria-1 of neighborful algorithm represents the number of
 #' adjoining neighbors of the selected colony that have colony area less than or
 #' equal to threshold value of median colony area of the plate. The threshold
-#' value of median colony growth area of the plate is determined as 25% of
+#' value of median colony growth area of the plate is determined as 25\% of
 #' plate median, which is an arbitrary number used in the literature. The
 #' exclusion criteria-1 can take one of any value of \code{1:8}, because of the
 #' possible adjoining neighbors for a selected colony will fall in this range.
@@ -26,7 +32,7 @@
 #' algorithm
 #'
 #' The exclusion criteria-2 of neighborful algorithm represents the number of
-#' adjoing neighbors of the selected colony are excluded by the previous
+#' adjoining neighbors of the selected colony are excluded by the previous
 #' iteration of the neighborful algorithm by using either or both exclusion
 #' criteria 1 & 2. The exclusion criteria-2 can take one of any value of
 #' \code{1:8}, because of the possible adjoining neighbors for a selected colony
@@ -62,9 +68,22 @@
 #' [, H] \tab Remove         \tab Remove        \tab 1\cr
 #' }
 #'
+#' References: 1. ScreenMill: A freely available software suite for growth measurement,
+#'                analysis and visualization of high-throughput screen data
+#'                John C Dittmar, Robert JD Reid and Rodney Rothstein
+#'                Bioinformatics 2010 11:353
+#'                DOI: 10.1186/1471-2105-11-353
+#'
 #' @param plateformat An integer which can be one of 96 or 384 or 1536
 #' @param colony_area_raw_data A numeric vector of raw data representing the area
-#' yeast grown at a specific location on a nutrient medium agar plate
+#' yeast grown at a specific location on a nutrient medium agar plate. This data
+#' must be arranged columnwise. See \code{simulated_data_1536(data_384=
+#' colonyarea$data_subtypes, in_data_flow = "down", out_data_flow   = "down",
+#' is_plate_coords = TRUE)}. If the data is arranged rowwise, then use
+#' \code{convert_down_across()} function to convert rowwise data into
+#' columnwise data. For more information on this function, read \code{
+#' help("convert_down_across")}.
+#'
 #' @param empty_indices A numeric vector of indexed empty locations. It can also
 #' be the indices of control colonies grown on a plate, which may be used for
 #' normalizing the colony area of a plate
@@ -73,13 +92,13 @@
 #' @param percent_median_thresh The integer representing the percentage used to
 #' compute the threshold value of plate median of colony area
 #'
-#' @param param1_threshold The numeric value which can be one from \code{1:8}.
+#' @param param1_threshold The numerical value which can be one from \code{1:8}.
 #' This exclusion criteria-1 of neighborful algorithm represents the number of
 #' adjoining neighbors of the selected colony from \code{colony_indices} that
 #' has colony area less than or equal to \code{plate_median_threshold}. If the
 #' selected colony is surrounded by at least \code{param1_threshold} neighbors,
 #' then it will be considered as excluded colony by the neighborful algorithm
-#' @param param2_threshold The numeric value which can be one from \code{1:8}.
+#' @param param2_threshold The numerical value which can be one from \code{1:8}.
 #' This exclusion criteria-2 of neighborful algorithm represents the number of
 #' adjoing neighbors of the selected colony from \code{colony_indices} are
 #' excluded by the previous iteration of neighborful algorithm. If the selected
@@ -97,195 +116,214 @@
 #'
 #' @examples
 #' plateformat <- 1536
-#' data_subtypes_384 <- colonyarea$data_subtypes
-#' data_area <- simulated_data_1536(data_subtypes_384,
-#'                                  out_data_flow = "across",
+#' data_area <- simulated_data_1536(data_384 = colonyarea$data_subtypes,
+#'                                  in_data_flow = "across",
+#'                                  out_data_flow = "down",
 #'                                  is_plate_coords = TRUE)
-#' empty_indices <- which(convert_small_to_large(384,
-#'                                               1536,
-#'                                               data_subtypes_384,
-#'                                               "across",
-#'                                                FALSE)$y %in% 'Empty')
+#' empty_indices <- which(convert_small_to_large(plate_from = 384,
+#'                                               plate_to = 1536,
+#'                                               data_from = colonyarea$data_subtypes,
+#'                                               in_data_flow = 'across',
+#'                                               out_data_flow = "down",
+#'                                               is_plate_coords = FALSE)$y %in% 'Empty')
 #' (neighborful_algorithm(plateformat           = 1536,
 #'                        colony_area_raw_data  = data_area$y,
 #'                        empty_indices         = empty_indices,
 #'                        excluded_colonies     = c(),
 #'                        percent_median_thresh = 25,
-#'                        param1_thresh         = 1,
-#'                        param2_thresh         = 1))
+#'                        param1_thresh         = 6,
+#'                        param2_thresh         = 2,
+#'                        is_save               = FALSE,
+#'                        excluded_file         = NULL))
 neighborful_algorithm <- function(plateformat,
                                   colony_area_raw_data,
-                                  empty_indices,
-                                  excluded_colonies,
+                                  empty_indices = NULL,
+                                  excluded_colonies = NULL,
                                   percent_median_thresh,
                                   param1_threshold,
                                   param2_threshold,
                                   is_save = FALSE,
                                   excluded_file = NULL)
 {
+  # sanity checks
+  stopifnot(length(plateformat) == 1 && (plateformat %in% c(96, 384, 1536, 6144)))
+  stopifnot(is.vector(colony_area_raw_data) &&
+              (is.numeric(colony_area_raw_data) || is.integer(colony_area_raw_data)))
+  stopifnot(is.null(empty_indices) ||
+              (is.numeric(empty_indices) || is.integer(empty_indices)))
+  stopifnot(is.null(excluded_colonies) ||
+              (is.numeric(excluded_colonies) || is.integer(excluded_colonies)))
+  stopifnot((is.numeric(percent_median_thresh) || is.integer(percent_median_thresh)) &&
+              length(percent_median_thresh) == 1)
+  stopifnot((is.numeric(param1_threshold) || is.integer(param1_threshold)) &&
+              length(param1_threshold) == 1)
+  stopifnot((is.numeric(param2_threshold) || is.integer(param2_threshold)) &&
+              length(param2_threshold) == 1)
+  stopifnot(is.logical(is_save) && length(is_save) == 1)
+  stopifnot( is.null(excluded_file) ||
+              (length(excluded_file) == 1 && is.character(excluded_file)))
+
   # 1. Apply neighborful algorithm to colony area raw data
   all_indices <- 1:plateformat
+  not_middle_colony_indices <- not_middle_indices(plateformat)
+  middle_colony_indices <- all_indices[-(not_middle_colony_indices)]
 
   # middle colonies
   is_middle <- TRUE
 
-  middle_colony_indices <- all_indices[-(not_middle_indices(plateformat))]
-
   plate_median_threshold <- plate_median(empty_indices, colony_area_raw_data
                                          )/(100/percent_median_thresh)
 
-  mid_excluded_colonies_A <- excluded_coloniesA(plateformat,
-                                                middle_colony_indices,
-                                                colony_area_raw_data,
-                                                empty_indices,
-                                                excluded_colonies,
-                                                plate_median_threshold,
-                                                param1_threshold,
-                                                param2_threshold,
-                                                is_middle)
+  mid_excluded_colonies_A <- excluded_coloniesA(plateformat = plateformat,
+                                                colony_indices = middle_colony_indices,
+                                                colony_area_raw_data = colony_area_raw_data,
+                                                empty_indices = empty_indices,
+                                                excluded_colonies = excluded_colonies,
+                                                plate_median_threshold = plate_median_threshold,
+                                                param1_threshold = param1_threshold,
+                                                param2_threshold = param2_threshold,
+                                                is_middle = is_middle)
 
-  mid_excluded_colonies_B <- excluded_coloniesB(plateformat,
-                                                middle_colony_indices,
-                                                colony_area_raw_data,
-                                                excluded_colonies,
-                                                plate_median_threshold,
-                                                param1_threshold,
-                                                param2_threshold,
-                                                is_middle)
+  mid_excluded_colonies_B <- excluded_coloniesB(plateformat = plateformat,
+                                                colony_indices = middle_colony_indices,
+                                                colony_area_raw_data = colony_area_raw_data,
+                                                excluded_colonies = excluded_colonies,
+                                                plate_median_threshold = plate_median_threshold,
+                                                param1_threshold = param1_threshold,
+                                                param2_threshold = param2_threshold,
+                                                is_middle = is_middle)
 
-  mid_excluded_colonies_C <- excluded_coloniesC(plateformat,
-                                                middle_colony_indices,
-                                                colony_area_raw_data,
-                                                empty_indices,
-                                                excluded_colonies,
-                                                plate_median_threshold,
-                                                param1_threshold,
-                                                is_middle)
+  mid_excluded_colonies_C <- excluded_coloniesC(plateformat = plateformat,
+                                                colony_indices = middle_colony_indices,
+                                                colony_area_raw_data = colony_area_raw_data,
+                                                empty_indices = empty_indices,
+                                                excluded_colonies = excluded_colonies,
+                                                plate_median_threshold = plate_median_threshold,
+                                                param1_threshold = param1_threshold,
+                                                is_middle = is_middle)
 
-  mid_excluded_colonies_D <- excluded_coloniesD(plateformat,
-                                                middle_colony_indices,
-                                                colony_area_raw_data,
-                                                excluded_colonies,
-                                                plate_median_threshold,
-                                                param1_threshold,
-                                                is_middle)
+  mid_excluded_colonies_D <- excluded_coloniesD(plateformat = plateformat,
+                                                colony_indices = middle_colony_indices,
+                                                colony_area_raw_data = colony_area_raw_data,
+                                                excluded_colonies = excluded_colonies,
+                                                plate_median_threshold = plate_median_threshold,
+                                                param1_threshold = param1_threshold,
+                                                is_middle = is_middle)
 
-  mid_excluded_colonies_E <- excluded_coloniesE(plateformat,
-                                                middle_colony_indices,
-                                                colony_area_raw_data,
-                                                empty_indices,
-                                                excluded_colonies,
-                                                plate_median_threshold,
-                                                param1_threshold,
-                                                param2_threshold,
-                                                is_middle)
+  mid_excluded_colonies_E <- excluded_coloniesE(plateformat = plateformat,
+                                                colony_indices = middle_colony_indices,
+                                                colony_area_raw_data = colony_area_raw_data,
+                                                empty_indices = empty_indices,
+                                                excluded_colonies = excluded_colonies,
+                                                plate_median_threshold = plate_median_threshold,
+                                                param1_threshold = param1_threshold,
+                                                param2_threshold = param2_threshold,
+                                                is_middle = is_middle)
 
-  mid_excluded_colonies_F <- excluded_coloniesF(plateformat,
-                                                middle_colony_indices,
-                                                colony_area_raw_data,
-                                                empty_indices,
-                                                excluded_colonies,
-                                                plate_median_threshold,
-                                                param1_threshold,
-                                                param2_threshold,
-                                                is_middle)
+  mid_excluded_colonies_F <- excluded_coloniesF(plateformat = plateformat,
+                                                colony_indices = middle_colony_indices,
+                                                colony_area_raw_data = colony_area_raw_data,
+                                                empty_indices = empty_indices,
+                                                excluded_colonies = excluded_colonies,
+                                                plate_median_threshold = plate_median_threshold,
+                                                param1_threshold = param1_threshold,
+                                                param2_threshold = param2_threshold,
+                                                is_middle = is_middle)
 
-  mid_excluded_colonies_G <- excluded_coloniesG(plateformat,
-                                                middle_colony_indices,
-                                                colony_area_raw_data,
-                                                empty_indices,
-                                                excluded_colonies,
-                                                plate_median_threshold,
-                                                param1_threshold,
-                                                is_middle)
+  mid_excluded_colonies_G <- excluded_coloniesG(plateformat = plateformat,
+                                                colony_indices = middle_colony_indices,
+                                                colony_area_raw_data = colony_area_raw_data,
+                                                empty_indices = empty_indices,
+                                                excluded_colonies = excluded_colonies,
+                                                plate_median_threshold = plate_median_threshold,
+                                                param1_threshold = param1_threshold,
+                                                is_middle = is_middle)
 
-  mid_excluded_colonies_H <- excluded_coloniesH(plateformat,
-                                                middle_colony_indices,
-                                                colony_area_raw_data,
-                                                empty_indices,
-                                                excluded_colonies,
-                                                plate_median_threshold,
-                                                param1_threshold,
-                                                is_middle)
+  mid_excluded_colonies_H <- excluded_coloniesH(plateformat = plateformat,
+                                                colony_indices = middle_colony_indices,
+                                                colony_area_raw_data = colony_area_raw_data,
+                                                empty_indices = empty_indices,
+                                                excluded_colonies = excluded_colonies,
+                                                plate_median_threshold = plate_median_threshold,
+                                                param1_threshold = param1_threshold,
+                                                is_middle = is_middle)
 
   #peripheral colonies
   is_middle <- FALSE
 
-  not_middle_colony_indices <- not_middle_indices(plateformat)
+  excluded_colonies_A <- excluded_coloniesA(plateformat = plateformat,
+                                            colony_indices = not_middle_colony_indices,
+                                            colony_area_raw_data = colony_area_raw_data,
+                                            empty_indices = empty_indices,
+                                            excluded_colonies = mid_excluded_colonies_A,
+                                            plate_median_threshold = plate_median_threshold,
+                                            param1_threshold = param1_threshold,
+                                            param2_threshold = param2_threshold,
+                                            is_middle = is_middle)
 
-  excluded_colonies_A <- excluded_coloniesA(plateformat,
-                                            not_middle_colony_indices,
-                                            colony_area_raw_data,
-                                            empty_indices,
-                                            mid_excluded_colonies_A,
-                                            plate_median_threshold,
-                                            param1_threshold,
-                                            param2_threshold,
-                                            is_middle)
+  excluded_colonies_B <- excluded_coloniesB(plateformat = plateformat,
+                                            colony_indices = not_middle_colony_indices,
+                                            colony_area_raw_data = colony_area_raw_data,
+                                            excluded_colonies = mid_excluded_colonies_B,
+                                            plate_median_threshold = plate_median_threshold,
+                                            param1_threshold = param1_threshold,
+                                            param2_threshold = param2_threshold,
+                                            is_middle = is_middle)
 
-  excluded_colonies_B <- excluded_coloniesB(plateformat,
-                                            not_middle_colony_indices,
-                                            colony_area_raw_data,
-                                            mid_excluded_colonies_B,
-                                            plate_median_threshold,
-                                            param1_threshold,
-                                            param2_threshold,
-                                            is_middle)
+  excluded_colonies_C <- excluded_coloniesC(plateformat = plateformat,
+                                            colony_indices = not_middle_colony_indices,
+                                            colony_area_raw_data = colony_area_raw_data,
+                                            empty_indices = empty_indices,
+                                            excluded_colonies = mid_excluded_colonies_C,
+                                            plate_median_threshold = plate_median_threshold,
+                                            param1_threshold = param1_threshold,
+                                            is_middle = is_middle)
 
-  excluded_colonies_C <- excluded_coloniesC(plateformat,
-                                            not_middle_colony_indices,
-                                            colony_area_raw_data,
-                                            empty_indices,
-                                            mid_excluded_colonies_C,
-                                            plate_median_threshold,
-                                            param1_threshold,
-                                            is_middle)
+  excluded_colonies_D <- excluded_coloniesD(plateformat = plateformat,
+                                            colony_indices = not_middle_colony_indices,
+                                            colony_area_raw_data = colony_area_raw_data,
+                                            excluded_colonies = mid_excluded_colonies_D,
+                                            plate_median_threshold = plate_median_threshold,
+                                            param1_threshold = param1_threshold,
+                                            is_middle = is_middle)
 
-  excluded_colonies_D <- excluded_coloniesD(plateformat,
-                                            not_middle_colony_indices,
-                                            colony_area_raw_data,
-                                            mid_excluded_colonies_D,
-                                            plate_median_threshold,
-                                            param1_threshold,
-                                            is_middle)
+  excluded_colonies_E <- excluded_coloniesE(plateformat = plateformat,
+                                            colony_indices = not_middle_colony_indices,
+                                            colony_area_raw_data = colony_area_raw_data,
+                                            empty_indices = empty_indices,
+                                            excluded_colonies = mid_excluded_colonies_E,
+                                            plate_median_threshold = plate_median_threshold,
+                                            param1_threshold = param1_threshold,
+                                            param2_threshold = param2_threshold,
+                                            is_middle = is_middle)
 
-  excluded_colonies_E <- excluded_coloniesE(plateformat,
-                                            not_middle_colony_indices,
-                                            colony_area_raw_data,
-                                            empty_indices,
-                                            mid_excluded_colonies_E,
-                                            plate_median_threshold,
-                                            param1_threshold,
-                                            param2_threshold,
-                                            is_middle)
+  excluded_colonies_F <- excluded_coloniesF(plateformat = plateformat,
+                                            colony_indices = not_middle_colony_indices,
+                                            colony_area_raw_data = colony_area_raw_data,
+                                            empty_indices = empty_indices,
+                                            excluded_colonies = mid_excluded_colonies_F,
+                                            plate_median_threshold = plate_median_threshold,
+                                            param1_threshold = param1_threshold,
+                                            param2_threshold = param2_threshold,
+                                            is_middle = is_middle)
 
-  excluded_colonies_F <- excluded_coloniesF(plateformat,
-                                            not_middle_colony_indices,
-                                            colony_area_raw_data,
-                                            empty_indices,
-                                            mid_excluded_colonies_F,
-                                            plate_median_threshold,
-                                            param1_threshold,
-                                            param2_threshold,
-                                            is_middle)
+  excluded_colonies_G <- excluded_coloniesG(plateformat = plateformat,
+                                            colony_indices = not_middle_colony_indices,
+                                            colony_area_raw_data = colony_area_raw_data,
+                                            empty_indices = empty_indices,
+                                            excluded_colonies = mid_excluded_colonies_G,
+                                            plate_median_threshold = plate_median_threshold,
+                                            param1_threshold = param1_threshold,
+                                            is_middle = is_middle)
 
-  excluded_colonies_G <- excluded_coloniesG(plateformat,
-                                            not_middle_colony_indices,
-                                            colony_area_raw_data,
-                                            empty_indices,
-                                            mid_excluded_colonies_G,
-                                            plate_median_threshold,
-                                            param1_threshold,
-                                            is_middle)
-
-  excluded_colonies_H <- excluded_coloniesH(plateformat,
-                                            not_middle_colony_indices,
-                                            colony_area_raw_data,
-                                            empty_indices,
-                                            mid_excluded_colonies_H,
-                                            plate_median_threshold,
-                                            param1_threshold,
-                                            is_middle)
+  excluded_colonies_H <- excluded_coloniesH(plateformat = plateformat,
+                                            colony_indices = not_middle_colony_indices,
+                                            colony_area_raw_data = colony_area_raw_data,
+                                            empty_indices = empty_indices,
+                                            excluded_colonies = mid_excluded_colonies_H,
+                                            plate_median_threshold = plate_median_threshold,
+                                            param1_threshold = param1_threshold,
+                                            is_middle = is_middle)
 
   excluded_colonies_A_H <- list()
   variations <- c('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')

@@ -18,11 +18,36 @@
 #' @export
 #'
 #' @examples
-#' convert_down_across(plateformat = 384,
-#'                     data_from = 1:384,
-#'                     is_plate_coords = TRUE,
-#'                     in_data_flow = 'down',
-#'                     out_data_flow = 'across')
+#' legend_txt_bg_col <- c('Empty'                     = 'red',
+#'                        'Pinning Error'             = 'black',
+#'                        'Morethan Plate Median'     = '#660066',
+#'                        'Lessthan Plate Median'     = 'green',
+#'                        'Morethan 90% Plate Median' = 'cyan',
+#'                        'Lessthan 25% Plate Median' = 'yellow',
+#'                        'Excluded Colonies'         = 'blue')
+#' plateformat <- 384
+#' across_384 <- convert_down_across(plateformat = plateformat,
+#'                                   data_from = colonyarea$data_subtypes,
+#'                                   is_plate_coords = TRUE,
+#'                                   in_data_flow = 'across',
+#'                                   out_data_flow = 'across')
+#'
+#' plot_platemap(plateformat = plateformat,
+#'               plot_data = across_384,
+#'               legend_txt_bg_col = legend_txt_bg_col)
+#'
+#' # Note the data structure is not disturbed after converting
+#' # rowwise(across) to columnwise(down). Also, try in_data_flow = 'down'
+#'
+#' across_down_384 <- convert_down_across(plateformat = plateformat,
+#'                                        data_from = colonyarea$data_subtypes,
+#'                                        is_plate_coords = TRUE,
+#'                                        in_data_flow = 'across',
+#'                                        out_data_flow = 'down')
+#'
+#' plot_platemap(plateformat = plateformat,
+#'               plot_data = across_down_384,
+#'               legend_txt_bg_col = legend_txt_bg_col)
 #'
 convert_down_across <- function(plateformat,
                                 data_from,

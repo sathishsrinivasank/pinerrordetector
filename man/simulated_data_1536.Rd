@@ -4,11 +4,15 @@
 \alias{simulated_data_1536}
 \title{Simulated data based on data subtypes from 384 to 1536 plateformat}
 \usage{
-simulated_data_1536(data_subtypes_384, out_data_flow = "across",
-  is_plate_coords = TRUE)
+simulated_data_1536(data_384, in_data_flow = "across",
+  out_data_flow = "down", is_plate_coords = FALSE)
 }
 \arguments{
-\item{data_subtypes_384}{A character vector with data subtypes of length 384}
+\item{data_384}{A character vector with data subtypes of length 384.
+See \code{example(simulated_data_1536)}}
+
+\item{in_data_flow}{A string indicating the plate format of
+\code{data_384}. It can take a value either across or down.}
 
 \item{out_data_flow}{A string which tells the function to output the
 converted data to a plate configuration which can be down or across}
@@ -22,8 +26,13 @@ A numeric vector with uniformly distributed data having median of 600
 \description{
 Uniformly distributed data with median of 600 is simulated and returned
 for  1536 plateformat configuration from 384 plateformat configuration.
+The data arrangement will be based on \code{data_384}.
 }
 \examples{
-simulated_data_1536(colonyarea$data_subtypes)
+simulated_data_1536(data_384 = colonyarea$data_subtypes,
+                    in_data_flow = "across",
+                    out_data_flow = "down",
+                    is_plate_coords = FALSE)
+
 }
 

@@ -4,15 +4,21 @@
 \alias{neighborful_algorithm}
 \title{Neighborful Algorithm}
 \usage{
-neighborful_algorithm(plateformat, colony_area_raw_data, empty_indices,
-  excluded_colonies, percent_median_thresh, param1_threshold, param2_threshold,
-  is_save = FALSE, excluded_file = NULL)
+neighborful_algorithm(plateformat, colony_area_raw_data, empty_indices = NULL,
+  excluded_colonies = NULL, percent_median_thresh, param1_threshold,
+  param2_threshold, is_save = FALSE, excluded_file = NULL)
 }
 \arguments{
 \item{plateformat}{An integer which can be one of 96 or 384 or 1536}
 
 \item{colony_area_raw_data}{A numeric vector of raw data representing the area
-yeast grown at a specific location on a nutrient medium agar plate}
+yeast grown at a specific location on a nutrient medium agar plate. This data
+must be arranged columnwise. See \code{simulated_data_1536(data_384=
+colonyarea$data_subtypes, in_data_flow = "down", out_data_flow   = "down",
+is_plate_coords = TRUE)}. If the data is arranged rowwise, then use
+\code{convert_down_across()} function to convert rowwise data into
+columnwise data. For more information on this function, read \code{
+help("convert_down_across")}.}
 
 \item{empty_indices}{A numeric vector of indexed empty locations. It can also
 be the indices of control colonies grown on a plate, which may be used for
@@ -24,14 +30,14 @@ colonies}
 \item{percent_median_thresh}{The integer representing the percentage used to
 compute the threshold value of plate median of colony area}
 
-\item{param1_threshold}{The numeric value which can be one from \code{1:8}.
+\item{param1_threshold}{The numerical value which can be one from \code{1:8}.
 This exclusion criteria-1 of neighborful algorithm represents the number of
 adjoining neighbors of the selected colony from \code{colony_indices} that
 has colony area less than or equal to \code{plate_median_threshold}. If the
 selected colony is surrounded by at least \code{param1_threshold} neighbors,
 then it will be considered as excluded colony by the neighborful algorithm}
 
-\item{param2_threshold}{The numeric value which can be one from \code{1:8}.
+\item{param2_threshold}{The numerical value which can be one from \code{1:8}.
 This exclusion criteria-2 of neighborful algorithm represents the number of
 adjoing neighbors of the selected colony from \code{colony_indices} are
 excluded by the previous iteration of neighborful algorithm. If the selected
@@ -58,17 +64,23 @@ algorithms A-H are implemented here. The differences between these variations
 of neighborful algorithm are based on
 \itemize{
  \item{Which exclusion criteria is applied}
- \item{Whether \code{empty_indices} is removed in the outer or inner loops of
+ \item{Whether \code{empty_indices} are removed in the outer or inner loops of
        neighborful algorithm}
 }
 }
 \details{
-Two exclusion criteria are used to consider a colony as excluded colony.
+Two exclusion criteria are used to consider a colony as excluded colony. The
+two parameters used in the global exclusion algorithm of Dittmar et al., 2010
+are "If at least six out of eight neighboring colonies fall below 25% of
+the plate growth median (parameter 1) or at least two neighboring colonies
+have already been excluded (parameter 2), the program highlights the colony
+in red for exclusion". In addition, the excluded colony must have colony area
+less than the defined plate median threshold.
 
 The exclusion criteria-1 of neighborful algorithm represents the number of
 adjoining neighbors of the selected colony that have colony area less than or
 equal to threshold value of median colony area of the plate. The threshold
-value of median colony growth area of the plate is determined as 25% of
+value of median colony growth area of the plate is determined as 25\% of
 plate median, which is an arbitrary number used in the literature. The
 exclusion criteria-1 can take one of any value of \code{1:8}, because of the
 possible adjoining neighbors for a selected colony will fall in this range.
@@ -77,7 +89,7 @@ neighbors, then it will be considered as excluded colony by the neighborful
 algorithm
 
 The exclusion criteria-2 of neighborful algorithm represents the number of
-adjoing neighbors of the selected colony are excluded by the previous
+adjoining neighbors of the selected colony are excluded by the previous
 iteration of the neighborful algorithm by using either or both exclusion
 criteria 1 & 2. The exclusion criteria-2 can take one of any value of
 \code{1:8}, because of the possible adjoining neighbors for a selected colony
@@ -112,24 +124,33 @@ The differences in the variations of neighborful algorithm are tabulated below.
 [, G] \tab Remove         \tab Do not remove \tab 1\cr
 [, H] \tab Remove         \tab Remove        \tab 1\cr
 }
+
+References: 1. ScreenMill: A freely available software suite for growth measurement,
+               analysis and visualization of high-throughput screen data
+               John C Dittmar, Robert JD Reid and Rodney Rothstein
+               Bioinformatics 2010 11:353
+               DOI: 10.1186/1471-2105-11-353
 }
 \examples{
 plateformat <- 1536
-data_subtypes_384 <- colonyarea$data_subtypes
-data_area <- simulated_data_1536(data_subtypes_384,
-                                 out_data_flow = "across",
+data_area <- simulated_data_1536(data_384 = colonyarea$data_subtypes,
+                                 in_data_flow = "across",
+                                 out_data_flow = "down",
                                  is_plate_coords = TRUE)
-empty_indices <- which(convert_small_to_large(384,
-                                              1536,
-                                              data_subtypes_384,
-                                              "across",
-                                               FALSE)$y \%in\% 'Empty')
+empty_indices <- which(convert_small_to_large(plate_from = 384,
+                                              plate_to = 1536,
+                                              data_from = colonyarea$data_subtypes,
+                                              in_data_flow = 'across',
+                                              out_data_flow = "down",
+                                              is_plate_coords = FALSE)$y \%in\% 'Empty')
 (neighborful_algorithm(plateformat           = 1536,
                        colony_area_raw_data  = data_area$y,
                        empty_indices         = empty_indices,
                        excluded_colonies     = c(),
                        percent_median_thresh = 25,
-                       param1_thresh         = 1,
-                       param2_thresh         = 1))
+                       param1_thresh         = 6,
+                       param2_thresh         = 2,
+                       is_save               = FALSE,
+                       excluded_file         = NULL))
 }
 

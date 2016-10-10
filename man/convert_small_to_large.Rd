@@ -4,8 +4,8 @@
 \alias{convert_small_to_large}
 \title{Convert data of small plateformat to large plateformat}
 \usage{
-convert_small_to_large(plate_from, plate_to, data_from, out_data_flow,
-  is_plate_coords)
+convert_small_to_large(plate_from, plate_to, data_from, in_data_flow,
+  out_data_flow, is_plate_coords)
 }
 \arguments{
 \item{plate_from}{An integer of small plateformat}
@@ -13,6 +13,9 @@ convert_small_to_large(plate_from, plate_to, data_from, out_data_flow,
 \item{plate_to}{An integer of large plateformat}
 
 \item{data_from}{vector of data for conversion}
+
+\item{in_data_flow}{A string indicating the plate format of \code{data_from}.
+It can take a value either across or down.}
 
 \item{out_data_flow}{A string which tells the function to output the
 converted data to a plate configuration which can be down or across}
@@ -31,12 +34,13 @@ Convert data of small plateformat \code{plate_from} to large plateformat
 \code{plate_to}
 }
 \examples{
-across_1536 <- convert_small_to_large(plate_from = 384,
-                                      plate_to = 1536,
-                                      data_from = colonyarea$data_subtypes,
-                                      out_data_flow = 'across',
-                                      is_plate_coords = TRUE)
-head(across_1536)
+down_1536 <- convert_small_to_large(plate_from = 384,
+                                    plate_to = 1536,
+                                    data_from = 1:384,
+                                    in_data_flow = 'down',
+                                    out_data_flow = 'down',
+                                    is_plate_coords = TRUE)
+head(down_1536)
 
 }
 
